@@ -325,7 +325,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
         return isShow;
     }
 
-    public void seekTo(int position) {
+    public void setProgress(int position) {
         position = position / mBarDuration;
         if (position >= 0 && position <= (mTrackDurationInSec / 1)) {
             mSeekToPosition = position;

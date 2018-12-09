@@ -184,11 +184,12 @@ public class MainActivity extends AppCompatActivity implements ValueAnimator.Ani
 
     @Override
     public void onAnimationUpdate(ValueAnimator animation) {
+
         if (mSeekBarIsTracking) {
             animation.cancel();
         } else {
-            musicBar.seekTo((int) animation.getAnimatedValue());
-            miniMusicBar.seekTo((int) animation.getAnimatedValue());
+            musicBar.setProgress((int) animation.getAnimatedValue());
+            miniMusicBar.setProgress((int) animation.getAnimatedValue());
         }
     }
 }
