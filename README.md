@@ -5,15 +5,7 @@
 
 ```groovy
 dependencies {
-      'implementation 'com.oze.music:MusicBar:1.0.0'
-}
-```
-```groovy
-allprojects {
-    repositories {
-        ... 
-        maven { url  "https://dl.bintray.com/emad/maven" }
-    }
+      implementation 'com.oze.music:MusicBar:1.0.0'
 }
 ```
 ## Usage
