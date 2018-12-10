@@ -116,7 +116,7 @@ bintray {
         issueTrackerUrl = issueUrl
         licenses = allLicenses
         publish = true
-        override = false
+        override = true
         version {
             name = libraryVersion
             desc = libraryDescription
