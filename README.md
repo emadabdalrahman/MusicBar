@@ -34,7 +34,7 @@ setSpaceBetweenBar(int spaceBetweenBar) | change distance between bars
 setBarWidth(float barWidth) | change bar width
 
 
-at **XML** 
+**XML** 
 ```XML
   <com.example.musicbar.BigMusicBar
         android:id="@+id/BigMusicBar"
@@ -42,7 +42,9 @@ at **XML**
         android:layout_height="200dp"
         android:background="@color/colorPrimaryDark"
         android:padding="8dp" />
-
+```
+OR
+```XML
     <com.example.musicbar.MiniMusicBar
         android:id="@+id/MiniMusicBar"
         android:layout_width="match_parent"
