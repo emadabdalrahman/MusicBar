@@ -25,10 +25,10 @@ show() | start show animation
 hide() | start hide animation
 setProgress(int position) | move to specified position (in milisecand) 
 getPosition() | return current progress position
-setLoadedBarColor(int color) | change progressed bar color
-setBackgroundBarColor(int color) | change unprogressed bar color
-setSpaceBetweenBar(int spaceBetweenBar) | change distance between bars
-setBarWidth(float barWidth) | change bar width
+setLoadedBarColor(int color) | change progressed bar color **default RED**
+setBackgroundBarColor(int color) | change unprogressed bar color **default #dfd6d6**
+setSpaceBetweenBar(int spaceBetweenBar) | change distance between bars (in px) **default 2**
+setBarWidth(float barWidth) | change bar width (in px) **default 2** 
 
 
 **XML** 
@@ -55,10 +55,45 @@ OR MiniMusicBar
         android:padding="8dp"
         android:background="@android:color/white" />
 ```
+**Java**
+```java
+ @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        
+        BigMusicBar musicBar = findViewById(R.id.BigMusicBar);
+        //or  
+        MiniMusicBar musicBar = findViewById(R.id.MiniMusicBar);
+        
+        //add animation listener
+        musicBar.setAnimationChangeListener(mOnMusicBarAnimationChangeListener);
+        
+        //add progress listener
+        musicBar.setProgressChangeListener(mOnMusicBarProgressChangeListener);
+        
+        //change progress 
+        musicBar.setProgress(50)
+        
+        //start show animation
+        musicBar.show()
+        
+        //start hide animation
+        musicBar.hide()
+        
+        //change bar width
+        musicBar.setBarWidth(2);
+        
+        //change Space Between Bars
+        musicBar.setSpaceBetweenBar(2); //Recommend to make barWidth equal spaceBetweenBar
+    }
+
+```
+
 
 **AnimationListener**
 ```Java
-MusicBar.OnMusicBarAnimationChangeListener onMusicBarAnimationChangeListener = new MusicBar.OnMusicBarAnimationChangeListener() {
+MusicBar.OnMusicBarAnimationChangeListener mOnMusicBarAnimationChangeListener = new MusicBar.OnMusicBarAnimationChangeListener() {
         @Override
         public void onHideAnimationStart() {
             Log.i(TAG, "onHideAnimationStart");
@@ -83,7 +118,7 @@ MusicBar.OnMusicBarAnimationChangeListener onMusicBarAnimationChangeListener = n
 ```
 **ProgressListener**
 ```Java
- MusicBar.OnMusicBarProgressChangeListener onMusicBarProgressChangeListener = new MusicBar.OnMusicBarProgressChangeListener() {
+ MusicBar.OnMusicBarProgressChangeListener mOnMusicBarProgressChangeListener = new MusicBar.OnMusicBarProgressChangeListener() {
         @Override
         public void onProgressChanged(MusicBar musicBar, int progress, boolean fromUser) {
             Log.i(TAG, "onProgressChanged");
