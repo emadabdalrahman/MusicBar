@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     byte[] mFile;
     int[] mBarHeight;
     int mTrackDurationInSec;
+    int mTrackDurationInMiliSec;
     int mActualBitRate;
     int mMaxDataPerBar = 0;
     int mSpaceBetweenBar = 2;
@@ -96,6 +98,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     public void loadFrom(byte[] file, int duration) {
         this.mFile = file;
+        this.mTrackDurationInMiliSec = duration;
         this.mTrackDurationInSec = duration/1000;
         this.mActualBitRate = file.length / duration;
         isNewLoad = true;
@@ -326,14 +329,20 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
         return isShow;
     }
 
+    /**
+     * move music bar to specified position
+     * @param position time in millisecond
+     */
     public void setProgress(int position) {
-        position = position / mBarDuration;
-        if (position >= 0 && position <= (mTrackDurationInSec / 1)) {
-            mSeekToPosition = position;
-            if (mMusicBarChangeListener != null) {
-                mMusicBarChangeListener.onProgressChanged(this, mSeekToPosition, false);
+        if (position >= 0 && position <= (mTrackDurationInMiliSec)) {
+            if (mSeekToPosition != position / mBarDuration) {
+                mSeekToPosition = position/ mBarDuration;
+                Log.i(TAG, "setProgress: "+mSeekToPosition );
+                if (mMusicBarChangeListener != null) {
+                    mMusicBarChangeListener.onProgressChanged(this, mSeekToPosition, false);
+                }
+                invalidate();
             }
-            invalidate();
         }
     }
 
