@@ -35,6 +35,10 @@ setBarWidth(float barWidth) | change bar width
 
 
 **XML** 
+
+for BigMusicBar
+
+![BigMusicBar](https://github.com/emadabdalrahman/MusicBar/blob/master/ScreenShots/imageedit_2_9685979139.png?raw=true)
 ```XML
    <com.oze.music.musicbar.BigMusicBar
         android:id="@+id/BigMusicBar"
@@ -43,7 +47,9 @@ setBarWidth(float barWidth) | change bar width
         android:background="@color/colorPrimaryDark"
         android:padding="8dp" />
 ```
-OR
+OR MiniMusicBar 
+
+![MiniMusicBar](https://github.com/emadabdalrahman/MusicBar/blob/master/ScreenShots/imageedit_3_9529005091.png?raw=true)
 ```XML
     <com.oze.music.musicbar.MiniMusicBar
         android:id="@+id/MiniMusicBar"
