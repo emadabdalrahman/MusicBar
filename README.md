@@ -36,7 +36,7 @@ setBarWidth(float barWidth) | change bar width
 
 **XML** 
 ```XML
-  <com.example.musicbar.BigMusicBar
+   <com.oze.music.musicbar.BigMusicBar
         android:id="@+id/BigMusicBar"
         android:layout_width="match_parent"
         android:layout_height="200dp"
@@ -45,7 +45,7 @@ setBarWidth(float barWidth) | change bar width
 ```
 OR
 ```XML
-    <com.example.musicbar.MiniMusicBar
+    <com.oze.music.musicbar.MiniMusicBar
         android:id="@+id/MiniMusicBar"
         android:layout_width="match_parent"
         android:layout_height="80dp"
