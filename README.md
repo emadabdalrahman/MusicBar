@@ -52,7 +52,7 @@ OR MiniMusicBar
         android:background="@color/colorPrimaryDark" />
 ```
 
-**listener**
+**AnimationListener**
 ```Java
 MusicBar.OnMusicBarAnimationChangeListener onMusicBarAnimationChangeListener = new MusicBar.OnMusicBarAnimationChangeListener() {
         @Override
@@ -77,3 +77,25 @@ MusicBar.OnMusicBarAnimationChangeListener onMusicBarAnimationChangeListener = n
         }
     };
 ```
+**ProgressListener**
+```Java
+ MusicBar.OnMusicBarProgressChangeListener onMusicBarProgressChangeListener = new MusicBar.OnMusicBarProgressChangeListener() {
+        @Override
+        public void onProgressChanged(MusicBar musicBar, int progress, boolean fromUser) {
+            Log.i(TAG, "onProgressChanged");
+        }
+
+        @Override
+        public void onStartTrackingTouch(MusicBar musicBar) {
+         Log.i(TAG, "onStartTrackingTouch");
+        }
+
+        @Override
+        public void onStopTrackingTouch(MusicBar musicBar) {
+            Log.i(TAG, "onStopTrackingTouch");
+        }
+    };
+```
+
+
+
