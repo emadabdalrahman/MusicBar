@@ -68,6 +68,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
 
         /**
          * Notification that the progress level has changed.
+         *
          * @param musicBar The MusicBar whose progress has changed
          * @param progress The current progress level.
          * @param fromUser True if the progress change was initiated by the user.
@@ -76,12 +77,14 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
 
         /**
          * Notification that the user has started a touch gesture.
+         *
          * @param musicBar The MusicBar in which the touch gesture began
          */
         void onStartTrackingTouch(MusicBar musicBar);
 
         /**
          * Notification that the user has finished a touch gesture.
+         *
          * @param musicBar The MusicBar in which the touch gesture began
          */
         void onStopTrackingTouch(MusicBar musicBar);
@@ -101,17 +104,17 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
         void onHideAnimationStart();
 
         /**
-         *Notification that Hide Animation End
+         * Notification that Hide Animation End
          */
         void onHideAnimationEnd();
 
         /**
-         *Notification that Show Animation Start
+         * Notification that Show Animation Start
          */
         void onShowAnimationStart();
 
         /**
-         *Notification that Show Animation End
+         * Notification that Show Animation End
          */
         void onShowAnimationEnd();
 
@@ -134,7 +137,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     public void loadFrom(byte[] file, int duration) {
         this.mFile = file;
         this.mTrackDurationInMiliSec = duration;
-        this.mTrackDurationInSec = duration/1000;
+        this.mTrackDurationInSec = duration / 1000;
         this.mActualBitRate = file.length / duration;
         isNewLoad = true;
         mSeekToPosition = -1;
@@ -382,13 +385,14 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     /**
      * move music bar to specified position
+     *
      * @param position time in millisecond
      */
     public void setProgress(int position) {
         if (position >= 0 && position <= (mTrackDurationInMiliSec)) {
             if (mSeekToPosition != position / mBarDuration) {
-                mSeekToPosition = position/ mBarDuration;
-                Log.i(TAG, "setProgress: "+mSeekToPosition );
+                mSeekToPosition = position / mBarDuration;
+                Log.i(TAG, "setProgress: " + mSeekToPosition);
                 if (mMusicBarChangeListener != null) {
                     mMusicBarChangeListener.onProgressChanged(this, mSeekToPosition, false);
                 }
@@ -407,7 +411,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     }
 
     /**
-     *Sets a listener to receive notifications of changes to the MusicBar's progress level.
+     * Set a listener to receive notifications of changes to the MusicBar's progress level.
      * Also provides notifications of when the user starts and stops a touch gesture within the SeekBar..
      *
      * @param musicBarChangeListener the music bar Progress change notification listener
@@ -418,7 +422,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     }
 
     /**
-     * Sets a listener to receive notifications about MusicBar's animation state.
+     * Set a listener to receive notifications about MusicBar's animation state.
      *
      * @param musicBarAnimationChangeListener the music bar animation change notification listener
      */
@@ -436,7 +440,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     }
 
     /**
-     * Sets loaded bar color. Default Value Color.RED
+     * Set loaded bar color. Default Value Color.RED
      *
      * @param color the color
      */
@@ -445,7 +449,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     }
 
     /**
-     * Sets background bar color. Default Value #dfd6d6
+     * Set background bar color. Default Value #dfd6d6
      *
      * @param color the color
      */
@@ -454,20 +458,26 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     }
 
     /**
-     * Sets space between bar. Default Value 2
-     *
+     * Set space between bar. Default Value 2
+     * Recommend to make spaceBetweenBar equal barWidth
      * @param spaceBetweenBar the space between bar
      */
     public void setSpaceBetweenBar(int spaceBetweenBar) {
-        this.mSpaceBetweenBar = spaceBetweenBar;
+        if (spaceBetweenBar > 0) {
+            this.mSpaceBetweenBar = spaceBetweenBar;
+        }
     }
 
     /**
-     * Sets bar width. Default Value 2
-     *
+     * Set bar width. Default Value 2
+     * Recommend to make barWidth equal spaceBetweenBar
      * @param barWidth the bar width
      */
     public void setBarWidth(float barWidth) {
-        this.mBarWidth = barWidth;
+        if (barWidth > 0) {
+            this.mBarWidth = barWidth;
+            this.mBackgroundPaint.setStrokeWidth(barWidth);
+            this.mLoadedPaint.setStrokeWidth(barWidth);
+        }
     }
 }
