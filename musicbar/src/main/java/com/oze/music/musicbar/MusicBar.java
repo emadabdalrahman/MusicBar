@@ -83,7 +83,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     private void init() {
         mBackgroundPaint = new Paint();
-        this.mBackgroundPaint.setColor(Color.YELLOW);
+        this.mBackgroundPaint.setColor(Color.parseColor("#dfd6d6"));
         this.mBackgroundPaint.setStrokeCap(Paint.Cap.SQUARE);
         this.mBackgroundPaint.setStrokeWidth(mBarWidth);
 
@@ -93,10 +93,11 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
         this.mLoadedPaint.setStrokeWidth(mBarWidth);
     }
 
-    public void loadFrom(byte[] file, int durationInSec) {
+
+    public void loadFrom(byte[] file, int duration) {
         this.mFile = file;
-        this.mTrackDurationInSec = durationInSec;
-        this.mActualBitRate = file.length / durationInSec;
+        this.mTrackDurationInSec = duration/1000;
+        this.mActualBitRate = file.length / duration;
         isNewLoad = true;
         mSeekToPosition = -1;
         invalidate();
