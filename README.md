@@ -41,7 +41,7 @@ for BigMusicBar
         android:id="@+id/BigMusicBar"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@color/colorPrimaryDark"
+        android:background="@android:color/white"
         android:padding="8dp" />
 ```
 OR MiniMusicBar 
@@ -53,8 +53,7 @@ OR MiniMusicBar
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:padding="8dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/colorPrimaryDark" />
+        android:background="@android:color/white" />
 ```
 
 **AnimationListener**
