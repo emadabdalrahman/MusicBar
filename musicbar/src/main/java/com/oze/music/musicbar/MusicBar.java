@@ -58,26 +58,61 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
         init();
     }
 
+    /**
+     * A callback that notifies clients when the progress level has been changed.
+     * This includes changes that were initiated by the user through a touch gesture
+     * or changes that were initiated programmatically.
+     */
     public interface OnMusicBarProgressChangeListener {
 
 
+        /**
+         * Notification that the progress level has changed.
+         * @param musicBar The MusicBar whose progress has changed
+         * @param progress The current progress level.
+         * @param fromUser True if the progress change was initiated by the user.
+         */
         void onProgressChanged(MusicBar musicBar, int progress, boolean fromUser);
 
+        /**
+         * Notification that the user has started a touch gesture.
+         * @param musicBar The MusicBar in which the touch gesture began
+         */
         void onStartTrackingTouch(MusicBar musicBar);
 
+        /**
+         * Notification that the user has finished a touch gesture.
+         * @param musicBar The MusicBar in which the touch gesture began
+         */
         void onStopTrackingTouch(MusicBar musicBar);
 
     }
 
+    /**
+     * A callback that notifies the hide and the show animation states.
+     * notifies when animation start or end
+     */
     public interface OnMusicBarAnimationChangeListener {
 
 
+        /**
+         * Notification that Hide Animation Start
+         */
         void onHideAnimationStart();
 
+        /**
+         *Notification that Hide Animation End
+         */
         void onHideAnimationEnd();
 
+        /**
+         *Notification that Show Animation Start
+         */
         void onShowAnimationStart();
 
+        /**
+         *Notification that Show Animation End
+         */
         void onShowAnimationEnd();
 
 
@@ -230,6 +265,9 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
         }
     }
 
+    /**
+     * Start Hide Animation. if view is hide nothing will happened
+     */
     public void hide() {
         if (!isHide && mMaxBarHeight != 0) {
             isAnimated = true;
@@ -237,6 +275,9 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
         }
     }
 
+    /**
+     * Start Show Animation. if view is Show nothing will happened
+     */
     public void show() {
         if (!isShow && mMaxBarHeight != 0) {
             isAnimated = true;
@@ -321,10 +362,20 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
         }
     }
 
+    /**
+     * Is hide boolean.
+     *
+     * @return boolean true if hide
+     */
     public boolean isHide() {
         return isHide;
     }
 
+    /**
+     * Is show boolean.
+     *
+     * @return boolean  true if show
+     */
     public boolean isShow() {
         return isShow;
     }
@@ -346,37 +397,76 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
         }
     }
 
+    /**
+     * Get current position.
+     *
+     * @return the position time in millisecond
+     */
     public int getPosition() {
         return mSeekToPosition * mBarDuration;
     }
 
+    /**
+     *Sets a listener to receive notifications of changes to the MusicBar's progress level.
+     * Also provides notifications of when the user starts and stops a touch gesture within the SeekBar..
+     *
+     * @param musicBarChangeListener the music bar Progress change notification listener
+     */
     public void setProgressChangeListener(OnMusicBarProgressChangeListener
                                                   musicBarChangeListener) {
         this.mMusicBarChangeListener = musicBarChangeListener;
     }
 
+    /**
+     * Sets a listener to receive notifications about MusicBar's animation state.
+     *
+     * @param musicBarAnimationChangeListener the music bar animation change notification listener
+     */
     public void setAnimationChangeListener(OnMusicBarAnimationChangeListener
                                                    musicBarAnimationChangeListener) {
         this.mMusicBarAnimationChangeListener = musicBarAnimationChangeListener;
     }
 
+    /**
+     * Remove AnimationChangeListener and ProgressChangeListener
+     */
     public void removeAllListener() {
         this.mMusicBarAnimationChangeListener = null;
         this.mMusicBarChangeListener = null;
     }
 
+    /**
+     * Sets loaded bar color. Default Value Color.RED
+     *
+     * @param color the color
+     */
     public void setLoadedBarColor(int color) {
         mLoadedPaint.setColor(color);
     }
 
+    /**
+     * Sets background bar color. Default Value #dfd6d6
+     *
+     * @param color the color
+     */
     public void setBackgroundBarColor(int color) {
         mBackgroundPaint.setColor(color);
     }
 
+    /**
+     * Sets space between bar. Default Value 2
+     *
+     * @param spaceBetweenBar the space between bar
+     */
     public void setSpaceBetweenBar(int spaceBetweenBar) {
         this.mSpaceBetweenBar = spaceBetweenBar;
     }
 
+    /**
+     * Sets bar width. Default Value 2
+     *
+     * @param barWidth the bar width
+     */
     public void setBarWidth(float barWidth) {
         this.mBarWidth = barWidth;
     }
