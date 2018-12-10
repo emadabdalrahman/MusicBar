@@ -51,3 +51,29 @@ OR MiniMusicBar
         android:layout_marginTop="16dp"
         android:background="@color/colorPrimaryDark" />
 ```
+
+**listener**
+```Java
+MusicBar.OnMusicBarAnimationChangeListener onMusicBarAnimationChangeListener = new MusicBar.OnMusicBarAnimationChangeListener() {
+        @Override
+        public void onHideAnimationStart() {
+            Log.i(TAG, "onHideAnimationStart");
+        }
+
+        @Override
+        public void onHideAnimationEnd() {
+            Log.i(TAG, "onHideAnimationEnd");
+        }
+
+        @Override
+        public void onShowAnimationStart() {
+            Log.i(TAG, "onShowAnimationStart");
+
+        }
+
+        @Override
+        public void onShowAnimationEnd() {
+            Log.i(TAG, "onShowAnimationEnd");
+        }
+    };
+```
