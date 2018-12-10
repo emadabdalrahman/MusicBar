@@ -1,5 +1,10 @@
-# MusicBar
+<p align="center">
+  <img src="https://github.com/emadabdalrahman/MusicBar/blob/master/ScreenShots/sound-bars-pulse.png?raw=true" alt="MusicBar Logo"/>
+</p>
 
+# MusicBar  [ ![Download](https://api.bintray.com/packages/emad/maven/MusicBar/images/download.svg) ](https://bintray.com/emad/maven/MusicBar/_latestVersion)
+
+![](https://github.com/emadabdalrahman/MusicBar/blob/master/ScreenShots/full-optimize.gif?raw=true)
 
 ## Setup
 
@@ -41,7 +46,7 @@ for BigMusicBar
 ```
 OR MiniMusicBar 
 
-![MiniMusicBar](https://github.com/emadabdalrahman/MusicBar/blob/master/ScreenShots/MiniMusicBar.png?raw=true)
+![MiniMusicBar](https://github.com/emadabdalrahman/MusicBar/blob/master/ScreenShots/MiniMusicBar.png?raw=true) 
 ```XML
     <com.oze.music.musicbar.MiniMusicBar
         android:id="@+id/MiniMusicBar"
@@ -96,6 +101,6 @@ MusicBar.OnMusicBarAnimationChangeListener onMusicBarAnimationChangeListener = n
         }
     };
 ```
+**animation**
 
-
-
+![animation](https://github.com/emadabdalrahman/MusicBar/blob/master/ScreenShots/animation-optimize.gif?raw=true)
