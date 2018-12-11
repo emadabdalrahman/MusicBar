@@ -17,7 +17,7 @@ ext {
     gitUrl = 'https://github.com/emadabdalrahman/MusicBar.git'
     issueUrl = 'https://github.com/emadabdalrahman/MusicBar/issues'
 
-    libraryVersion = '1.0.0'
+    libraryVersion = '1.0.1'
 
     developerId = 'emad'
     developerName = 'emad'
