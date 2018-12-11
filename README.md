@@ -10,7 +10,7 @@
 
 ```groovy
 dependencies {
-      implementation 'com.oze.music:MusicBar:1.0.0'
+      implementation 'com.oze.music:MusicBar:1.0.1'
 }
 ```
 ## Usage
@@ -20,7 +20,8 @@ Function | Description
 setAnimationChangeListener(OnMusicBarAnimationChangeListener listener) | animation listener
 setProgressChangeListener(OnMusicBarProgressChangeListener listener) | progress listener
 removeAllListener() | remove Progress and Animation listener
-loadFrom(byte[] file, int duration) | load the music file as byte[] with music duration in millisecond
+loadFrom(InputStream stream, int duration) | take the music file InputStream with music duration in millisecond
+loadFrom(String pathname, int duration) | take the music file path with music duration in millisecond
 show() | start show animation
 hide() | start hide animation
 setProgress(int position) | move to specified position (in milisecand) 
@@ -87,9 +88,9 @@ OR MiniMusicBar
         //change Space Between Bars
         musicBar.setSpaceBetweenBar(2); //Recommend to make spaceBetweenBar equal barWidth
        
-        // byte[] buffer = load the music file as byte[] from InputStream
+        // String path = the music file path
         // int duration = the music file duration time in millisecond
-        musicBar.loadFrom(buffer,duration)
+        musicBar.loadFrom(path,duration)
     }
 
 ```
