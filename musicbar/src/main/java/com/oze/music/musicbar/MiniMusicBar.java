@@ -28,10 +28,12 @@ public class MiniMusicBar extends MusicBar {
         if (mMaxNumOfBar == 0)
             mMaxNumOfBar = (int) ((getWidth() - getPaddingLeft() - getPaddingRight()) / (mBarWidth + mSpaceBetweenBar));
 
-        if (isNewLoad && mFile != null && mFile.length > 0) {
+
+        if (isNewLoad && mStream != null && mStreamLength > 0) {
             mBarHeight = getBarHeight(fixData(getBitPer(mMaxNumOfBar)));
             isNewLoad = false;
-            mBarDuration = ((mFile.length / mMaxNumOfBar) * 1000) / (mFile.length / mTrackDurationInSec);
+
+            mBarDuration = ((mStreamLength / mMaxNumOfBar) * 1000) / (mStreamLength / mTrackDurationInSec);
         }
 
         if (mBarHeight != null && mBarHeight.length > 0) {

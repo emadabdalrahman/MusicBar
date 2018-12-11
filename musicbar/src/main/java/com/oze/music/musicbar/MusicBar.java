@@ -3,7 +3,6 @@ package com.oze.music.musicbar;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
@@ -11,16 +10,18 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListener {
 
     String TAG = "MusicBar";
-    byte[] mFile;
     int[] mBarHeight;
     int mTrackDurationInSec;
-    int mTrackDurationInMiliSec;
-    int mActualBitRate;
+    int mTrackDurationInMilliSec;
     int mMaxDataPerBar = 0;
     int mSpaceBetweenBar = 2;
     int mSeekToPosition = -1;
@@ -42,6 +43,8 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     float mFirstTouchX = 0;
     final int ANIMATION_TYPE_SHOW = 0;
     final int ANIMATION_TYPE_HIDE = 1;
+    InputStream mStream;
+    int mStreamLength = 0;
 
     public MusicBar(Context context) {
         super(context);
@@ -89,6 +92,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
          */
         void onStopTrackingTouch(MusicBar musicBar);
 
+
     }
 
     /**
@@ -96,6 +100,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
      * notifies when animation start or end
      */
     public interface OnMusicBarAnimationChangeListener {
+
 
 
         /**
@@ -133,32 +138,33 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
         this.mLoadedPaint.setStrokeWidth(mBarWidth);
     }
 
-
-    public void loadFrom(byte[] file, int duration) {
-        this.mFile = file;
-        this.mTrackDurationInMiliSec = duration;
+    public void loadFrom(InputStream stream, int duration) {
+        this.mStream = stream;
+        this.mTrackDurationInMilliSec = duration;
         this.mTrackDurationInSec = duration / 1000;
-        this.mActualBitRate = file.length / duration;
+        try {
+            this.mStreamLength = stream.available();
+//            this.mActualBitRate = stream.available() / duration;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         isNewLoad = true;
         mSeekToPosition = -1;
         invalidate();
     }
 
-    int[] getBitPerHalfSec() {
-        int[] data = new int[mTrackDurationInSec * 2];
-        int bitRate = mFile.length / (mTrackDurationInSec * 2);
-        for (int i = 0; i < mTrackDurationInSec * 2; i++) {
-            int temp = 0;
-            for (int j = i * bitRate; j < (i + 1) * bitRate; j++) {
-                temp = temp + mFile[j];
-            }
-            data[i] = Math.abs(temp);
+    public void loadFrom(String pathname, int duration) {
+        File file = new File(pathname);
+        try {
+            InputStream stream = new FileInputStream(file);
+            loadFrom(stream,duration);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return data;
     }
 
     int[] getBitPerSec() {
-        int[] data = getBitPerHalfSec();
+        int[] data = getBitPer(mTrackDurationInSec*2);
         int[] dataPerSec = new int[mTrackDurationInSec];
         for (int i = 0; i < mTrackDurationInSec; i++) {
             dataPerSec[i] = (data[i * 2] + data[i * 2 + 1]) / 2;
@@ -204,21 +210,22 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     int[] getBitPer(int numOfBar) {
         int[] data = new int[numOfBar];
-        int bitRate = mFile.length / numOfBar;
-
-        for (int i = 0; i < data.length; i++) {
-            int temp = 0;
-            for (int j = i * bitRate; j < (i + 1) * bitRate; j++) {
-                temp = temp + mFile[j];
+        try {
+            int bitRate = mStream.available() / (numOfBar);
+            byte[] buffer = new byte[bitRate];
+            for (int i = 0; i < data.length; i++) {
+                int temp = 0;
+                mStream.read(buffer, 0, bitRate);
+                for (int j = 0; j < buffer.length; j++) {
+                    temp = temp + buffer[j];
+                }
+                data[i] = Math.abs(temp);
             }
-            data[i] = Math.abs(temp);
+            mStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return data;
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
     }
 
     private int getMedium(int[] data) {
@@ -389,7 +396,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
      * @param position time in millisecond
      */
     public void setProgress(int position) {
-        if (position >= 0 && position <= (mTrackDurationInMiliSec)) {
+        if (position >= 0 && position <= (mTrackDurationInMilliSec)) {
             if (mSeekToPosition != position / mBarDuration) {
                 mSeekToPosition = position / mBarDuration;
                 Log.i(TAG, "setProgress: " + mSeekToPosition);
@@ -460,6 +467,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     /**
      * Set space between bar. Default Value 2
      * Recommend to make spaceBetweenBar equal barWidth
+     *
      * @param spaceBetweenBar the space between bar
      */
     public void setSpaceBetweenBar(int spaceBetweenBar) {
@@ -471,6 +479,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     /**
      * Set bar width. Default Value 2
      * Recommend to make barWidth equal spaceBetweenBar
+     *
      * @param barWidth the bar width
      */
     public void setBarWidth(float barWidth) {

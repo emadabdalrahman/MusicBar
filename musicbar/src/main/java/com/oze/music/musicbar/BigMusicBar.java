@@ -26,7 +26,7 @@ public class BigMusicBar extends MusicBar implements ValueAnimator.AnimatorUpdat
     @Override
     protected void onDraw(Canvas canvas) {
 
-        if (isNewLoad && mFile != null && mFile.length > 0) {
+        if (isNewLoad && mStream != null && mStreamLength > 0) {
             mBarHeight = getBarHeight(fixData(getBitPerSec()));
             isNewLoad = false;
         }
@@ -37,7 +37,6 @@ public class BigMusicBar extends MusicBar implements ValueAnimator.AnimatorUpdat
         if (mBarHeight != null && mBarHeight.length > 0) {
 
             int baseLine = getHeight() / 2;
-
 
             int startBar = mSeekToPosition - (mMaxNumOfBar / 2);
             if (startBar < 0) startBar = 0;
