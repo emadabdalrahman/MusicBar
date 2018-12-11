@@ -10,7 +10,7 @@
 
 ```groovy
 dependencies {
-      implementation 'com.oze.music:MusicBar:1.0.0'
+      implementation 'com.oze.music:MusicBar:1.0.1'
 }
 ```
 ## Usage
