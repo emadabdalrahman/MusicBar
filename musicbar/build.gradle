@@ -17,7 +17,7 @@ ext {
     gitUrl = 'https://github.com/emadabdalrahman/MusicBar.git'
     issueUrl = 'https://github.com/emadabdalrahman/MusicBar/issues'
 
-    libraryVersion = '1.0.1'
+    libraryVersion = '1.0.2'
 
     developerId = 'emad'
     developerName = 'emad'
@@ -116,7 +116,7 @@ bintray {
         issueTrackerUrl = issueUrl
         licenses = allLicenses
         publish = true
-        override = true
+        override = false
         version {
             name = libraryVersion
             desc = libraryDescription
