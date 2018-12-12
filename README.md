@@ -2,7 +2,7 @@
   <img src="https://github.com/emadabdalrahman/MusicBar/blob/master/ScreenShots/sound-bars-pulse.png?raw=true" alt="MusicBar Logo"/>
 </p>
 
-# MusicBar  [ ![Download](https://api.bintray.com/packages/emad/maven/MusicBar/images/download.svg) ](https://bintray.com/emad/maven/MusicBar/_latestVersion)
+# MusicBar  [ ![Download](https://api.bintray.com/packages/emad/maven/MusicBar/images/download.svg) ](https://bintray.com/emad/maven/MusicBar/_latestVersion) ![](https://img.shields.io/badge/minSdkVersion-15-orange.svg)
 
 ![](https://github.com/emadabdalrahman/MusicBar/blob/master/ScreenShots/full-optimize.gif?raw=true)
 
@@ -34,23 +34,23 @@ setBarWidth(float barWidth) | change bar width (in px) **default 2** Recommend t
 
 **XML** 
 
-for BigMusicBar
+for ScrollableMusicBar
 
 ![BigMusicBar](https://github.com/emadabdalrahman/MusicBar/blob/master/ScreenShots/BigMusicBar.png?raw=true)
 ```XML
-   <com.oze.music.musicbar.BigMusicBar
-        android:id="@+id/BigMusicBar"
+   <com.oze.music.musicbar.ScrollableMusicBar
+        android:id="@+id/ScrollableMusicBar"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="@android:color/white"
         android:padding="8dp" />
 ```
-OR MiniMusicBar 
+OR FixedMusicBar 
 
 ![MiniMusicBar](https://github.com/emadabdalrahman/MusicBar/blob/master/ScreenShots/MiniMusicBar.png?raw=true) 
 ```XML
-    <com.oze.music.musicbar.MiniMusicBar
-        android:id="@+id/MiniMusicBar"
+    <com.oze.music.musicbar.FixedMusicBar
+        android:id="@+id/FixedMusicBar"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:padding="8dp"
@@ -63,9 +63,9 @@ OR MiniMusicBar
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        BigMusicBar musicBar = findViewById(R.id.BigMusicBar);
+        ScrollableMusicBar musicBar = findViewById(R.id.ScrollableMusicBar);
         //or  
-        MiniMusicBar musicBar = findViewById(R.id.MiniMusicBar);
+        FixedMusicBar musicBar = findViewById(R.id.FixedMusicBar);
         
         //add animation listener
         musicBar.setAnimationChangeListener(mOnMusicBarAnimationChangeListener);
@@ -89,8 +89,11 @@ OR MiniMusicBar
         musicBar.setSpaceBetweenBar(2); //Recommend to make spaceBetweenBar equal barWidth
        
         // String path = the music file path
-        // int duration = the music file duration time in millisecond
+        // int duration = the music file duration time in millisecond [mediaPlayer.getDuration()]
         musicBar.loadFrom(path,duration)
+        //or use inputstream 
+        musicBar.loadFrom(getResources().openRawResource(R.raw.music),duration());
+
     }
 
 ```
@@ -140,6 +143,6 @@ MusicBar.OnMusicBarAnimationChangeListener mOnMusicBarAnimationChangeListener = 
         }
     };
 ```
-**animation**
+**Animation**
 
 ![animation](https://github.com/emadabdalrahman/MusicBar/blob/master/ScreenShots/animation-optimize.gif?raw=true)
