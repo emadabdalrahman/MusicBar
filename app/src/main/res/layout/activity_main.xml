@@ -8,7 +8,7 @@
     tools:ignore="HardcodedText"
     tools:context=".MainActivity">
 
-    <com.oze.music.musicbar.BigMusicBar
+    <com.oze.music.musicbar.ScrollableMusicBar
         android:id="@+id/BigMusicBar"
         android:layout_width="match_parent"
         android:layout_height="200dp"
@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.oze.music.musicbar.MiniMusicBar
+    <com.oze.music.musicbar.FixedMusicBar
         android:id="@+id/MiniMusicBar"
         android:layout_width="match_parent"
         android:layout_height="80dp"

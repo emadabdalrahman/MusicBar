@@ -9,15 +9,15 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 
-import com.oze.music.musicbar.BigMusicBar;
-import com.oze.music.musicbar.MiniMusicBar;
+import com.oze.music.musicbar.ScrollableMusicBar;
+import com.oze.music.musicbar.FixedMusicBar;
 import com.oze.music.musicbar.MusicBar;
 
 public class MainActivity extends AppCompatActivity implements ValueAnimator.AnimatorUpdateListener {
 
     public static final String TAG = "MainActivity";
-    BigMusicBar musicBar;
-    MiniMusicBar miniMusicBar;
+    ScrollableMusicBar scrollableMusicBar;
+    FixedMusicBar fixedMusicBar;
     Button hide;
     Button show;
     MediaPlayer mediaPlayer;
@@ -74,22 +74,22 @@ public class MainActivity extends AppCompatActivity implements ValueAnimator.Ani
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        musicBar = findViewById(R.id.BigMusicBar);
-        miniMusicBar = findViewById(R.id.MiniMusicBar);
+        scrollableMusicBar = findViewById(R.id.BigMusicBar);
+        fixedMusicBar = findViewById(R.id.MiniMusicBar);
 
         mediaPlayer = MediaPlayer.create(this, R.raw.music);
         mediaPlayer.start();
 
-        musicBar.loadFrom(getResources().openRawResource(R.raw.music), mediaPlayer.getDuration());
-        miniMusicBar.loadFrom(getResources().openRawResource(R.raw.music),mediaPlayer.getDuration());
+        scrollableMusicBar.loadFrom(getResources().openRawResource(R.raw.music), mediaPlayer.getDuration());
+        fixedMusicBar.loadFrom(getResources().openRawResource(R.raw.music),mediaPlayer.getDuration());
 
         initValueAnimator(1.0f, 0, mediaPlayer.getDuration());
 
-        musicBar.setAnimationChangeListener(onMusicBarAnimationChangeListener);
-        musicBar.setProgressChangeListener(onMusicBarProgressChangeListener);
+        scrollableMusicBar.setAnimationChangeListener(onMusicBarAnimationChangeListener);
+        scrollableMusicBar.setProgressChangeListener(onMusicBarProgressChangeListener);
 
-        miniMusicBar.setAnimationChangeListener(onMusicBarAnimationChangeListener);
-        miniMusicBar.setProgressChangeListener(onMusicBarProgressChangeListener);
+        fixedMusicBar.setAnimationChangeListener(onMusicBarAnimationChangeListener);
+        fixedMusicBar.setProgressChangeListener(onMusicBarProgressChangeListener);
 
         initButton();
     }
@@ -122,13 +122,13 @@ public class MainActivity extends AppCompatActivity implements ValueAnimator.Ani
     }
 
     private void oHideClick() {
-        musicBar.hide();
-        miniMusicBar.hide();
+        scrollableMusicBar.hide();
+        fixedMusicBar.hide();
     }
 
     private void onShowClick() {
-        musicBar.show();
-        miniMusicBar.show();
+        scrollableMusicBar.show();
+        fixedMusicBar.show();
     }
 
     @Override
@@ -137,8 +137,8 @@ public class MainActivity extends AppCompatActivity implements ValueAnimator.Ani
         if (mSeekBarIsTracking) {
             animation.cancel();
         } else {
-            musicBar.setProgress((int) animation.getAnimatedValue());
-            miniMusicBar.setProgress((int) animation.getAnimatedValue());
+            scrollableMusicBar.setProgress((int) animation.getAnimatedValue());
+            fixedMusicBar.setProgress((int) animation.getAnimatedValue());
         }
     }
 }

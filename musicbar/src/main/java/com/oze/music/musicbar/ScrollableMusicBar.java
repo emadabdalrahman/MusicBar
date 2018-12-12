@@ -1,5 +1,6 @@
 package com.oze.music.musicbar;
 
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -8,38 +9,41 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 
-public class MiniMusicBar extends MusicBar {
+public class ScrollableMusicBar extends MusicBar implements ValueAnimator.AnimatorUpdateListener {
 
-    public MiniMusicBar(Context context) {
+    public ScrollableMusicBar(Context context) {
         super(context);
     }
 
-    public MiniMusicBar(Context context, @Nullable AttributeSet attrs) {
+    public ScrollableMusicBar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public MiniMusicBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ScrollableMusicBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
 
-        if (mMaxNumOfBar == 0)
-            mMaxNumOfBar = (int) ((getWidth() - getPaddingLeft() - getPaddingRight()) / (mBarWidth + mSpaceBetweenBar));
-
-
         if (isNewLoad && mStream != null && mStreamLength > 0) {
-            mBarHeight = getBarHeight(fixData(getBitPer(mMaxNumOfBar)));
+            mBarHeight = getBarHeight(fixData(getBitPerSec()));
             isNewLoad = false;
-
-            mBarDuration = ((mStreamLength / mMaxNumOfBar) * 1000) / (mStreamLength / mTrackDurationInSec);
         }
+
+        if (mMaxNumOfBar == 0)
+            mMaxNumOfBar = (int) (getWidth() / (mBarWidth + mSpaceBetweenBar));
 
         if (mBarHeight != null && mBarHeight.length > 0) {
 
             int baseLine = getHeight() / 2;
-            for (int i = 0; i < mBarHeight.length; i++) {
+
+            int startBar = mSeekToPosition - (mMaxNumOfBar / 2);
+            if (startBar < 0) startBar = 0;
+            int endBar = startBar + mMaxNumOfBar;
+            if (endBar > mBarHeight.length) endBar = mBarHeight.length;
+
+            for (int i = startBar; i < endBar; i++) {
                 int height = mBarHeight[i];
 
                 if (isAnimated) {
@@ -47,11 +51,18 @@ public class MiniMusicBar extends MusicBar {
                     if (height <= 0) height = mMinBarHeight;
                 }
 
-                float startX = getPaddingLeft() + i * (mBarWidth + mSpaceBetweenBar);
+                float startX;
+                if (mSeekToPosition < mMaxNumOfBar / 2)
+                    startX = (2 + (getWidth() / 2) - (mSeekToPosition * (mBarWidth + mSpaceBetweenBar))
+                            + (i - (startBar)) * (mBarWidth + mSpaceBetweenBar));
+                else
+                    startX = 2 + (i - (startBar)) * (mBarWidth + mSpaceBetweenBar);
+
+
                 float startY = baseLine + (height / 2);
                 float top = startY - height;
 
-                if (i <= mSeekToPosition) {
+                if (startX < getWidth() / 2) {
                     canvas.drawLine(startX, startY, startX, top, mLoadedPaint);
                 } else {
                     canvas.drawLine(startX, startY, startX, top, mBackgroundPaint);
@@ -69,12 +80,13 @@ public class MiniMusicBar extends MusicBar {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 onStartTrackingTouch();
-                updateView(event);
                 setPressed(true);
+                mFirstTouchX = event.getX();
                 break;
             case MotionEvent.ACTION_MOVE:
                 setPressed(true);
-                updateView(event);
+                updateView(event, mFirstTouchX);
+                mFirstTouchX = event.getX();
                 break;
             case MotionEvent.ACTION_UP:
                 onStopTrackingTouch();
@@ -87,20 +99,26 @@ public class MiniMusicBar extends MusicBar {
                 setPressed(false);
                 break;
         }
+
         return true;
     }
 
-    private void updateView(MotionEvent event) {
-        mSeekToPosition = (int) (event.getX() / (mBarWidth + mSpaceBetweenBar));
+    private void updateView(MotionEvent event, float firstTouchX) {
+
         Log.i(TAG, "updateView: " + mSeekToPosition);
+
+        float secondTouch = event.getX();
+        int distance = (int) ((secondTouch - firstTouchX) / (mBarWidth + mSpaceBetweenBar));
+
+        mSeekToPosition = mSeekToPosition - distance;
         if (mSeekToPosition < 0) {
             mSeekToPosition = 0;
-        } else if (mSeekToPosition > mMaxNumOfBar) {
-            mSeekToPosition = mMaxNumOfBar;
+        } else if (mSeekToPosition > mBarHeight.length) {
+            mSeekToPosition = mBarHeight.length;
         } else {
-            invalidate();
             if (mMusicBarChangeListener != null)
                 mMusicBarChangeListener.onProgressChanged(this, mSeekToPosition, true);
         }
+        invalidate();
     }
 }
