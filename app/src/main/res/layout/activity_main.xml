@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:ignore="HardcodedText"
     tools:context=".MainActivity">
 
     <com.oze.music.musicbar.BigMusicBar
         android:id="@+id/BigMusicBar"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@color/colorPrimaryDark"
         android:paddingBottom="8dp"
         android:paddingTop="8dp"
         android:paddingRight="8dp"
@@ -25,30 +26,30 @@
         android:layout_height="80dp"
         android:padding="8dp"
         android:layout_marginTop="16dp"
-        android:background="@color/colorPrimaryDark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/BigMusicBar" />
 
     <Button
-        android:id="@+id/next"
+        android:id="@+id/hide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="next"
+        android:text="Hide"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/previous" />
+        app:layout_constraintStart_toEndOf="@+id/show"
+         />
 
     <Button
-        android:id="@+id/previous"
+        android:id="@+id/show"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="previous"
+        android:text="Show"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/next"
+        app:layout_constraintEnd_toStartOf="@+id/hide"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>
