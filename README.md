@@ -34,7 +34,7 @@ setBarWidth(float barWidth) | change bar width (in px) **default 2** Recommend t
 
 **XML** 
 
-for BigMusicBar
+for ScrollableMusicBar
 
 ![BigMusicBar](https://github.com/emadabdalrahman/MusicBar/blob/master/ScreenShots/BigMusicBar.png?raw=true)
 ```XML
@@ -45,7 +45,7 @@ for BigMusicBar
         android:background="@android:color/white"
         android:padding="8dp" />
 ```
-OR MiniMusicBar 
+OR FixedMusicBar 
 
 ![MiniMusicBar](https://github.com/emadabdalrahman/MusicBar/blob/master/ScreenShots/MiniMusicBar.png?raw=true) 
 ```XML
@@ -143,6 +143,6 @@ MusicBar.OnMusicBarAnimationChangeListener mOnMusicBarAnimationChangeListener = 
         }
     };
 ```
-**animation**
+**Animation**
 
 ![animation](https://github.com/emadabdalrahman/MusicBar/blob/master/ScreenShots/animation-optimize.gif?raw=true)
