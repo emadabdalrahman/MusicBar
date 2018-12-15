@@ -16,7 +16,7 @@ public class ScrollableMusicBar extends MusicBar implements ValueAnimator.Animat
     private float startY;
     private float stopY;
     private float startX;
-    private boolean IsDivided;
+    private boolean isDivided;
     private float mDividerSize = 4;
     private Paint mDarkLoadedPaint;
     private Paint mDarkBackgroundPaint;
@@ -64,7 +64,7 @@ public class ScrollableMusicBar extends MusicBar implements ValueAnimator.Animat
                     getResources().getColor(R.color.DarkLoadedBarColor)));
             mDarkBackgroundPaint.setColor(typedArray.getColor(R.styleable.MusicBar_darkBackgroundBarColor,
                     getResources().getColor(R.color.DarkBackgroundBarColor)));
-            IsDivided= typedArray.getBoolean(R.styleable.MusicBar_divided,false);
+            isDivided = typedArray.getBoolean(R.styleable.MusicBar_divided,false);
             mDividerSize = typedArray.getFloat(R.styleable.MusicBar_dividerSize,4);
 
         } finally {
@@ -107,7 +107,7 @@ public class ScrollableMusicBar extends MusicBar implements ValueAnimator.Animat
                 else
                     startX = 2 + (i - (startBar)) * (mBarWidth + mSpaceBetweenBar);
 
-                if (IsDivided) {
+                if (isDivided) {
                     drawDividedBar(canvas, height, baseLine);
                 } else {
                     drawStraightBar(canvas, height, baseLine);
@@ -148,7 +148,7 @@ public class ScrollableMusicBar extends MusicBar implements ValueAnimator.Animat
     }
 
     private int getBaseLine() {
-        if (IsDivided) {
+        if (isDivided) {
             return (getHeight() / 8) * 5;
         } else {
             return (getHeight() / 2);
@@ -205,7 +205,7 @@ public class ScrollableMusicBar extends MusicBar implements ValueAnimator.Animat
     }
 
     public void setDivided(boolean divided) {
-        this.IsDivided = divided;
+        this.isDivided = divided;
     }
 
     public void setDividerSize(float size) {
