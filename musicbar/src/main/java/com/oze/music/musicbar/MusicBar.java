@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -35,8 +34,8 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     boolean isHide = false;
     boolean isShow = true;
     boolean isAnimated;
-    Paint mLoadedPaint;
-    Paint mBackgroundPaint;
+    Paint mLoadedBarPrimeColor;
+    Paint mBackgroundBarPrimeColor;
     OnMusicBarProgressChangeListener mMusicBarChangeListener;
     OnMusicBarAnimationChangeListener mMusicBarAnimationChangeListener;
     int mAnimatedValue = 0;
@@ -129,15 +128,15 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     }
 
     private void init() {
-        mBackgroundPaint = new Paint();
-        this.mBackgroundPaint.setColor(Color.parseColor("#dfd6d6"));
-        this.mBackgroundPaint.setStrokeCap(Paint.Cap.SQUARE);
-        this.mBackgroundPaint.setStrokeWidth(mBarWidth);
+        mBackgroundBarPrimeColor = new Paint();
+        this.mBackgroundBarPrimeColor.setColor(getResources().getColor(R.color.BackgroundBarPrimeColor));
+        this.mBackgroundBarPrimeColor.setStrokeCap(Paint.Cap.SQUARE);
+        this.mBackgroundBarPrimeColor.setStrokeWidth(mBarWidth);
 
-        mLoadedPaint = new Paint();
-        this.mLoadedPaint.setColor(Color.RED);
-        this.mLoadedPaint.setStrokeCap(Paint.Cap.SQUARE);
-        this.mLoadedPaint.setStrokeWidth(mBarWidth);
+        mLoadedBarPrimeColor = new Paint();
+        this.mLoadedBarPrimeColor.setColor(getResources().getColor(R.color.LoadedBarPrimeColor));
+        this.mLoadedBarPrimeColor.setStrokeCap(Paint.Cap.SQUARE);
+        this.mLoadedBarPrimeColor.setStrokeWidth(mBarWidth);
     }
 
     private void loadAttribute(Context context, AttributeSet attrs) {
@@ -148,11 +147,15 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
         try {
 
             mSpaceBetweenBar = typedArray.getInteger(R.styleable.MusicBar_spaceBetweenBar, 2);
+
             mBarWidth = typedArray.getFloat(R.styleable.MusicBar_barWidth, 2);
-            mLoadedPaint.setColor(typedArray.getColor(R.styleable.MusicBar_loadedBarColor,
-                    getResources().getColor(R.color.LoadedBarColor)));
-            mBackgroundPaint.setColor(typedArray.getColor(R.styleable.MusicBar_backgroundBarColor,
-                    getResources().getColor(R.color.BackgroundBarColor)));
+            mLoadedBarPrimeColor.setStrokeWidth(mBarWidth);
+            mBackgroundBarPrimeColor.setStrokeWidth(mBarWidth);
+
+            mLoadedBarPrimeColor.setColor(typedArray.getColor(R.styleable.MusicBar_LoadedBarPrimeColor,
+                    getResources().getColor(R.color.LoadedBarPrimeColor)));
+            mBackgroundBarPrimeColor.setColor(typedArray.getColor(R.styleable.MusicBar_backgroundBarPrimeColor,
+                    getResources().getColor(R.color.BackgroundBarPrimeColor)));
 
         } finally {
             typedArray.recycle();
@@ -469,21 +472,21 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     }
 
     /**
-     * Set loaded bar color. Default Value Color.RED
+     * Set Prime loaded bar color. Default Value #fb4c01
      *
      * @param color the color
      */
-    public void setLoadedBarColor(int color) {
-        mLoadedPaint.setColor(color);
+    public void setLoadedBarPrimeColor(int color) {
+        mLoadedBarPrimeColor.setColor(color);
     }
 
     /**
-     * Set background bar color. Default Value #dfd6d6
+     * Set Prime background bar color. Default Value #ffffff
      *
      * @param color the color
      */
-    public void setBackgroundBarColor(int color) {
-        mBackgroundPaint.setColor(color);
+    public void setBackgroundBarPrimeColor(int color) {
+        mBackgroundBarPrimeColor.setColor(color);
     }
 
     /**
@@ -499,7 +502,9 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     }
 
     /**
-     * Set bar width. Default Value 2
+     * Set bar width.
+     * for FixedMusicBar Default Value 2
+     * for ScrollableMusicBar Default Value 3
      * Recommend to make barWidth equal spaceBetweenBar
      *
      * @param barWidth the bar width
@@ -507,8 +512,8 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     public void setBarWidth(float barWidth) {
         if (barWidth > 0) {
             this.mBarWidth = barWidth;
-            this.mBackgroundPaint.setStrokeWidth(barWidth);
-            this.mLoadedPaint.setStrokeWidth(barWidth);
+            this.mBackgroundBarPrimeColor.setStrokeWidth(barWidth);
+            this.mLoadedBarPrimeColor.setStrokeWidth(barWidth);
         }
     }
 }
