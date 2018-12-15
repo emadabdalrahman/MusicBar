@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="MusicBar">
+        <attr name="spaceBetweenBar" format="integer" />
+        <attr name="barWidth" format="float"/>
+        <attr name="loadedBarColor" format="color"/>
+        <attr name="backgroundBarColor" format="color"/>
+        <attr name="darkLoadedBarColor" format="color"/>
+        <attr name="darkBackgroundBarColor" format="color"/>
+        <attr name="divided" format="boolean"/>
+        <attr name="dividerSize" format="float"/>
+    </declare-styleable>
+
+</resources>
