@@ -10,6 +10,10 @@ import android.view.MotionEvent;
 
 public class FixedMusicBar extends MusicBar {
 
+    float startX;
+    float startY;
+    float top;
+
     public FixedMusicBar(Context context) {
         super(context);
     }
@@ -47,9 +51,9 @@ public class FixedMusicBar extends MusicBar {
                     if (height <= 0) height = mMinBarHeight;
                 }
 
-                float startX = getPaddingLeft() + i * (mBarWidth + mSpaceBetweenBar);
-                float startY = baseLine + (height / 2);
-                float top = startY - height;
+                startX = getPaddingLeft() + i * (mBarWidth + mSpaceBetweenBar);
+                startY = baseLine + (height / 2);
+                top = startY - height;
 
                 if (i <= mSeekToPosition) {
                     canvas.drawLine(startX, startY, startX, top, mLoadedPaint);
