@@ -3,6 +3,7 @@ package com.oze.music.musicbar;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
@@ -54,11 +55,13 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     public MusicBar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
+        loadAttribute(context, attrs);
     }
 
     public MusicBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
+        loadAttribute(context, attrs);
     }
 
     /**
@@ -102,7 +105,6 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     public interface OnMusicBarAnimationChangeListener {
 
 
-
         /**
          * Notification that Hide Animation Start
          */
@@ -138,6 +140,25 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
         this.mLoadedPaint.setStrokeWidth(mBarWidth);
     }
 
+    private void loadAttribute(Context context, AttributeSet attrs) {
+        TypedArray typedArray = context.getTheme().obtainStyledAttributes(
+                attrs,
+                R.styleable.MusicBar, 0, 0);
+
+        try {
+
+            mSpaceBetweenBar = typedArray.getInteger(R.styleable.MusicBar_spaceBetweenBar, 2);
+            mBarWidth = typedArray.getFloat(R.styleable.MusicBar_barWidth, 2);
+            mLoadedPaint.setColor(typedArray.getColor(R.styleable.MusicBar_loadedBarColor,
+                    getResources().getColor(R.color.LoadedBarColor)));
+            mBackgroundPaint.setColor(typedArray.getColor(R.styleable.MusicBar_backgroundBarColor,
+                    getResources().getColor(R.color.BackgroundBarColor)));
+
+        } finally {
+            typedArray.recycle();
+        }
+    }
+
     public void loadFrom(InputStream stream, int duration) {
         this.mStream = stream;
         this.mTrackDurationInMilliSec = duration;
@@ -157,14 +178,14 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
         File file = new File(pathname);
         try {
             InputStream stream = new FileInputStream(file);
-            loadFrom(stream,duration);
+            loadFrom(stream, duration);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     int[] getBitPerSec() {
-        int[] data = getBitPer(mTrackDurationInSec*2);
+        int[] data = getBitPer(mTrackDurationInSec * 2);
         int[] dataPerSec = new int[mTrackDurationInSec];
         for (int i = 0; i < mTrackDurationInSec; i++) {
             dataPerSec[i] = (data[i * 2] + data[i * 2 + 1]) / 2;
@@ -392,6 +413,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     /**
      * move music bar to specified position
+     * should be between 0 and duration of sound file in millisecond
      *
      * @param position time in millisecond
      */
