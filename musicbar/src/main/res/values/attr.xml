@@ -4,10 +4,10 @@
     <declare-styleable name="MusicBar">
         <attr name="spaceBetweenBar" format="integer" />
         <attr name="barWidth" format="float"/>
-        <attr name="loadedBarColor" format="color"/>
-        <attr name="backgroundBarColor" format="color"/>
-        <attr name="darkLoadedBarColor" format="color"/>
-        <attr name="darkBackgroundBarColor" format="color"/>
+        <attr name="LoadedBarPrimeColor" format="color"/>
+        <attr name="backgroundBarPrimeColor" format="color"/>
+        <attr name="LoadedBarSecondaryColor" format="color"/>
+        <attr name="BackgroundBarSecondaryColor" format="color"/>
         <attr name="divided" format="boolean"/>
         <attr name="dividerSize" format="float"/>
     </declare-styleable>
