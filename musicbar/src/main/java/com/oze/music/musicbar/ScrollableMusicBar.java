@@ -17,9 +17,9 @@ public class ScrollableMusicBar extends MusicBar implements ValueAnimator.Animat
     private float stopY;
     private float startX;
     private boolean isDivided;
-    private float mDividerSize = 4;
-    private Paint mDarkLoadedPaint;
-    private Paint mDarkBackgroundPaint;
+    private float mDividerSize = 2;
+    private Paint mLoadedBarSecondaryPaint;
+    private Paint mBackgroundBarSecondaryPaint;
     private int topBar;
     private int bottomBar;
 
@@ -32,41 +32,48 @@ public class ScrollableMusicBar extends MusicBar implements ValueAnimator.Animat
     public ScrollableMusicBar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
-        loadAttribute(context,attrs);
+        loadAttribute(context, attrs);
     }
 
     public ScrollableMusicBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
-        loadAttribute(context,attrs);
+        loadAttribute(context, attrs);
     }
 
     private void init() {
-        mDarkBackgroundPaint = new Paint();
-        this.mDarkBackgroundPaint.setColor(getResources().getColor(R.color.DarkBackgroundBarColor));
-        this.mDarkBackgroundPaint.setStrokeCap(Paint.Cap.SQUARE);
-        this.mDarkBackgroundPaint.setStrokeWidth(mBarWidth);
+        mBackgroundBarSecondaryPaint = new Paint();
+        this.mBackgroundBarSecondaryPaint.setColor(getResources().getColor(R.color.BackgroundBarSecondaryColor));
+        this.mBackgroundBarSecondaryPaint.setStrokeCap(Paint.Cap.SQUARE);
+        this.mBackgroundBarSecondaryPaint.setStrokeWidth(mBarWidth);
 
-        mDarkLoadedPaint = new Paint();
-        this.mDarkLoadedPaint.setColor(getResources().getColor(R.color.DarkLoadedBarColor));
-        this.mDarkLoadedPaint.setStrokeCap(Paint.Cap.SQUARE);
-        this.mDarkLoadedPaint.setStrokeWidth(mBarWidth);
+        mLoadedBarSecondaryPaint = new Paint();
+        this.mLoadedBarSecondaryPaint.setColor(getResources().getColor(R.color.LoadedBarSecondaryColor));
+        this.mLoadedBarSecondaryPaint.setStrokeCap(Paint.Cap.SQUARE);
+        this.mLoadedBarSecondaryPaint.setStrokeWidth(mBarWidth);
     }
 
-    private void loadAttribute(Context context,AttributeSet attrs) {
+    private void loadAttribute(Context context, AttributeSet attrs) {
         TypedArray typedArray = context.getTheme().obtainStyledAttributes(
                 attrs,
                 R.styleable.MusicBar, 0, 0);
 
         try {
 
-            mDarkLoadedPaint.setColor(typedArray.getColor(R.styleable.MusicBar_darkLoadedBarColor,
-                    getResources().getColor(R.color.DarkLoadedBarColor)));
-            mDarkBackgroundPaint.setColor(typedArray.getColor(R.styleable.MusicBar_darkBackgroundBarColor,
-                    getResources().getColor(R.color.DarkBackgroundBarColor)));
-            isDivided = typedArray.getBoolean(R.styleable.MusicBar_divided,false);
-            mDividerSize = typedArray.getFloat(R.styleable.MusicBar_dividerSize,4);
+            mLoadedBarSecondaryPaint.setColor(typedArray.getColor(R.styleable.MusicBar_LoadedBarSecondaryColor,
+                    getResources().getColor(R.color.LoadedBarSecondaryColor)));
+            mBackgroundBarSecondaryPaint.setColor(typedArray.getColor(R.styleable.MusicBar_BackgroundBarSecondaryColor,
+                    getResources().getColor(R.color.BackgroundBarSecondaryColor)));
+            isDivided = typedArray.getBoolean(R.styleable.MusicBar_divided, false);
+            mDividerSize = typedArray.getFloat(R.styleable.MusicBar_dividerSize, 2);
+            mBarWidth = typedArray.getFloat(R.styleable.MusicBar_barWidth, 3);
 
+            mLoadedBarPrimeColor.setStrokeWidth(mBarWidth);
+            mBackgroundBarPrimeColor.setStrokeWidth(mBarWidth);
+            mLoadedBarSecondaryPaint.setStrokeWidth(mBarWidth);
+            mBackgroundBarSecondaryPaint.setStrokeWidth(mBarWidth);
+
+            mDividerSize = mBarWidth + mDividerSize;
         } finally {
             typedArray.recycle();
         }
@@ -129,11 +136,11 @@ public class ScrollableMusicBar extends MusicBar implements ValueAnimator.Animat
         stopY = baseLine - (mDividerSize / 2) - topBar;
 
         if (startX < getWidth() / 2) {
-            canvas.drawLine(startX, startY, startX, baseLine + (mDividerSize / 2), mDarkLoadedPaint);
-            canvas.drawLine(startX, baseLine - (mDividerSize / 2), startX, stopY, mLoadedPaint);
+            canvas.drawLine(startX, startY, startX, baseLine + (mDividerSize / 2), mLoadedBarSecondaryPaint);
+            canvas.drawLine(startX, baseLine - (mDividerSize / 2), startX, stopY, mLoadedBarPrimeColor);
         } else {
-            canvas.drawLine(startX, startY, startX, baseLine + (mDividerSize / 2), mDarkBackgroundPaint);
-            canvas.drawLine(startX, baseLine - (mDividerSize / 2), startX, stopY, mBackgroundPaint);
+            canvas.drawLine(startX, startY, startX, baseLine + (mDividerSize / 2), mBackgroundBarSecondaryPaint);
+            canvas.drawLine(startX, baseLine - (mDividerSize / 2), startX, stopY, mBackgroundBarPrimeColor);
         }
     }
 
@@ -141,9 +148,9 @@ public class ScrollableMusicBar extends MusicBar implements ValueAnimator.Animat
         startY = baseLine + (height / 2);
         stopY = startY - height;
         if (startX < getWidth() / 2) {
-            canvas.drawLine(startX, startY, startX, stopY, mLoadedPaint);
+            canvas.drawLine(startX, startY, startX, stopY, mLoadedBarPrimeColor);
         } else {
-            canvas.drawLine(startX, startY, startX, stopY, mBackgroundPaint);
+            canvas.drawLine(startX, startY, startX, stopY, mBackgroundBarPrimeColor);
         }
     }
 
@@ -204,19 +211,40 @@ public class ScrollableMusicBar extends MusicBar implements ValueAnimator.Animat
         invalidate();
     }
 
+    /**
+     * Set if music bar divided or not.
+     * default value false.
+     *
+     * @param divided the divided
+     */
     public void setDivided(boolean divided) {
         this.isDivided = divided;
     }
 
+    /**
+     * Set divider size in px.
+     *
+     * @param size the size in px
+     */
     public void setDividerSize(float size) {
         this.mDividerSize = size;
     }
 
-    public void setDarkLoadedColor(int color) {
-        mDarkLoadedPaint.setColor(color);
+    /**
+     * Set Secondary loaded color .
+     * Default Value #ffbf99.
+     * @param color the color
+     */
+    public void setLoadedSecondaryColor(int color) {
+        mLoadedBarSecondaryPaint.setColor(color);
     }
 
-    public void setDarkBackgroundColor(int color) {
-        mDarkBackgroundPaint.setColor(color);
+    /**
+     * Sets Secondary background color.
+     * Default Value #dbdbdb
+     * @param color the color
+     */
+    public void setBackgroundSecondaryColor(int color) {
+        mBackgroundBarSecondaryPaint.setColor(color);
     }
 }
