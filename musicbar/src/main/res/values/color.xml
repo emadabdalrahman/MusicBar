@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="BackgroundBarColor">#dfd6d6</color>
+    <color name="DarkBackgroundBarColor">#b0a8a8</color>
+    <color name="LoadedBarColor">#ff0000</color>
+    <color name="DarkLoadedBarColor">#8c0000</color>
+</resources>
