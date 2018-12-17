@@ -481,7 +481,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     }
 
     /**
-     * Set Prime background bar color. Default Value #ffffff
+     * Set Prime background bar color. Default Value #dfd6d6
      *
      * @param color the color
      */
