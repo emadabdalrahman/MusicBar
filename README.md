@@ -2,7 +2,7 @@
   <img src="https://github.com/emadabdalrahman/MusicBar/blob/master/ScreenShots/sound-bars-pulse.png?raw=true" alt="MusicBar Logo"/>
 </p>
 
-# MusicBar  [ ![Download](https://api.bintray.com/packages/emad/maven/MusicBar/images/download.svg) ](https://bintray.com/emad/maven/MusicBar/_latestVersion) ![](https://img.shields.io/badge/minSdkVersion-15-orange.svg)
+# MusicBar  [ ![Download](https://api.bintray.com/packages/emad/maven/MusicBar/images/download.svg) ](https://bintray.com/emad/maven/MusicBar/_latestVersion) ![](https://img.shields.io/badge/minSdkVersion-15-orange.svg)  [![Android Arsenal]( https://img.shields.io/badge/Android%20Arsenal-MusicBar-green.svg?style=flat )]( https://android-arsenal.com/details/1/7371 )
 
 ![](https://github.com/emadabdalrahman/MusicBar/blob/master/ScreenShots/full-optimize.gif?raw=true)
 
@@ -10,7 +10,7 @@
 
 ```groovy
 dependencies {
-      implementation 'com.oze.music:MusicBar:1.0.1'
+      implementation 'com.oze.music:MusicBar:1.0.2'
 }
 ```
 ## Usage
