@@ -247,4 +247,21 @@ public class ScrollableMusicBar extends MusicBar implements ValueAnimator.Animat
     public void setBackgroundBarSecondaryColor(int color) {
         mBackgroundBarSecondaryPaint.setColor(color);
     }
+
+    /**
+     * Set bar width.
+     * for FixedMusicBar Default Value 2
+     * for ScrollableMusicBar Default Value 3
+     * Recommend to make barWidth equal spaceBetweenBar
+     *
+     * @param barWidth the bar width
+     */
+    @Override
+    public void setBarWidth(float barWidth) {
+        super.setBarWidth(barWidth);
+        if (barWidth > 0) {
+            mBackgroundBarSecondaryPaint.setStrokeWidth(barWidth);
+            mLoadedBarSecondaryPaint.setStrokeWidth(barWidth);
+        }
+    }
 }
