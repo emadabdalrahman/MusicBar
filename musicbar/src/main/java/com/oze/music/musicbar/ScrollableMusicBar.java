@@ -62,7 +62,7 @@ public class ScrollableMusicBar extends MusicBar implements ValueAnimator.Animat
 
             mLoadedBarSecondaryPaint.setColor(typedArray.getColor(R.styleable.MusicBar_LoadedBarSecondaryColor,
                     getResources().getColor(R.color.LoadedBarSecondaryColor)));
-            mBackgroundBarSecondaryPaint.setColor(typedArray.getColor(R.styleable.MusicBar_BackgroundBarSecondaryColor,
+            mBackgroundBarSecondaryPaint.setColor(typedArray.getColor(R.styleable.MusicBar_backgroundBarSecondaryColor,
                     getResources().getColor(R.color.BackgroundBarSecondaryColor)));
             isDivided = typedArray.getBoolean(R.styleable.MusicBar_divided, false);
             mDividerSize = typedArray.getFloat(R.styleable.MusicBar_dividerSize, 2);
@@ -99,9 +99,9 @@ public class ScrollableMusicBar extends MusicBar implements ValueAnimator.Animat
             int endBar = startBar + mMaxNumOfBar;
             if (endBar > mBarHeight.length) endBar = mBarHeight.length;
 
-
+            int height;
             for (int i = startBar; i < endBar; i++) {
-                int height = mBarHeight[i];
+                height = mBarHeight[i];
 
                 if (isAnimated) {
                     height = height - mAnimatedValue;
