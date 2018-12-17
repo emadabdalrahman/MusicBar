@@ -235,7 +235,7 @@ public class ScrollableMusicBar extends MusicBar implements ValueAnimator.Animat
      * Default Value #eca277.
      * @param color the color
      */
-    public void setLoadedSecondaryColor(int color) {
+    public void setLoadedBarSecondaryColor(int color) {
         mLoadedBarSecondaryPaint.setColor(color);
     }
 
@@ -244,7 +244,7 @@ public class ScrollableMusicBar extends MusicBar implements ValueAnimator.Animat
      * Default Value #c4bbbb
      * @param color the color
      */
-    public void setBackgroundSecondaryColor(int color) {
+    public void setBackgroundBarSecondaryColor(int color) {
         mBackgroundBarSecondaryPaint.setColor(color);
     }
 }
