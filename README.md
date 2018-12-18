@@ -17,10 +17,8 @@ dependencies {
 
 Function | Description
 ------------ | -------------
-setAnimationChangeListener(OnMusicBarAnimation
-ChangeListener listener) | animation listener
-setProgressChangeListener(OnMusicBarProgress
-ChangeListener listener) | progress listener
+setAnimationChangeListener(OnMusicBarAnimationChangeListener listener) | animation listener
+setProgressChangeListener(OnMusicBarProgressChangeListener listener) | progress listener
 removeAllListener() | remove Progress and Animation listener
 loadFrom(InputStream stream, int duration) | take the music file InputStream with music duration in millisecond
 loadFrom(String pathname, int duration) | take the music file path with music duration in millisecond
