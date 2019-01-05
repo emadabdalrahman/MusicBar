@@ -10,7 +10,7 @@
 
 ```groovy
 dependencies {
-      implementation 'com.oze.music:MusicBar:1.0.2'
+      implementation 'com.oze.music:MusicBar:1.0.4'
 }
 ```
 ## Usage
@@ -26,35 +26,57 @@ show() | start show animation
 hide() | start hide animation
 setProgress(int position) | move to specified position (in milisecand) 
 getPosition() | return current progress position
-setLoadedBarColor(int color) | change progressed bar color **default RED**
-setBackgroundBarColor(int color) | change unprogressed bar color **default #dfd6d6**
-setSpaceBetweenBar(int spaceBetweenBar) | change distance between bars (in px) **default 2** Recommend to make spaceBetweenBar equal barWidth
-setBarWidth(float barWidth) | change bar width (in px) **default 2** Recommend to make barWidth equal spaceBetweenBar
+setSpaceBetweenBar(int spaceBetweenBar) | change distance between bars (in px) **default 2** Recommend to make spaceBetweenBar equal barWidth if you use FixedMusicBar
+setBarWidth(float barWidth) | change bar width (in px) **default 2 for FixedMusicBar and 3 for ScrollableMusicBar** Recommend to make barWidth equal spaceBetweenBar if you use FixedMusicBar 
+setLoadedBarPrimeColor(int color) | change top progressed bar color **default #fb4c01** 
+setBackgroundBarPrimeColor(int color) | change top unprogressed bar color **default #dfd6d6**
 
+
+Only in ScrollableMusicBar 
+
+Function | Description
+------------ | -------------
+setDivided(boolean divided) | Set if music bar divided or not **default false**
+setDividerSize(float size) | Set divider size in px **default 2** use when view is divided
+setLoadedBarSecondaryColor(int color) | change bottom progressed bar color **default #eca277** use when view is divided
+setBackgroundBarSecondaryColor(int color) | change bottom unprogressed bar color **default #c4bbbb** use when view is divided
 
 **XML** 
 
 for ScrollableMusicBar
 
-![BigMusicBar](https://github.com/emadabdalrahman/MusicBar/blob/master/ScreenShots/BigMusicBar.png?raw=true)
+![ScrollableMusicBar](https://github.com/emadabdalrahman/MusicBar/blob/master/ScreenShots/imgonline-com-ua-collage-6MmaF0pDG9O9.jpg?raw=true)
+
 ```XML
    <com.oze.music.musicbar.ScrollableMusicBar
         android:id="@+id/ScrollableMusicBar"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="@android:color/white"
-        android:padding="8dp" />
+        android:padding="8dp"
+        app:divided="true"                               // to divide each bar default false
+        app:dividerSize="2"                              // divide sice in px default 2
+        app:barWidth="3"                                 // bar width default 3
+        app:spaceBetweenBar="2"                          // distance between each bar default 2
+        app:backgroundBarPrimeColor="#dfd6d6"
+        app:backgroundBarSecondaryColor="#c4bbbb"
+        app:LoadedBarPrimeColor="#fb4c01"
+        app:LoadedBarSecondaryColor="#eca277"/>
 ```
 OR FixedMusicBar 
 
-![MiniMusicBar](https://github.com/emadabdalrahman/MusicBar/blob/master/ScreenShots/MiniMusicBar.png?raw=true) 
+![FixedMusicBar](https://github.com/emadabdalrahman/MusicBar/blob/master/ScreenShots/MiniMusicBar.png?raw=true) 
 ```XML
     <com.oze.music.musicbar.FixedMusicBar
         android:id="@+id/FixedMusicBar"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:padding="8dp"
-        android:background="@android:color/white" />
+        android:background="@android:color/white"
+        app:barWidth="2"                           // bar width default 2
+        app:spaceBetweenBar="2"                    // distance between each bar default 2
+        app:backgroundBarPrimeColor="#dfd6d6"
+        app:LoadedBarPrimeColor="#fb4c01"/>
 ```
 **Java**
 ```java
@@ -73,6 +95,12 @@ OR FixedMusicBar
         //add progress listener
         musicBar.setProgressChangeListener(mOnMusicBarProgressChangeListener);
         
+         // String path = the music file path
+        // int duration = the music file duration time in millisecond [mediaPlayer.getDuration()]
+        musicBar.loadFrom(path,duration)
+        //or use inputstream 
+        musicBar.loadFrom(getResources().openRawResource(R.raw.music),duration());
+        
         //change progress 
         musicBar.setProgress(50)
         
@@ -86,13 +114,19 @@ OR FixedMusicBar
         musicBar.setBarWidth(2);
         
         //change Space Between Bars
-        musicBar.setSpaceBetweenBar(2); //Recommend to make spaceBetweenBar equal barWidth
+        musicBar.setSpaceBetweenBar(2); //Recommend to make spaceBetweenBar equal barWidth if you use FixedMusicBar
        
-        // String path = the music file path
-        // int duration = the music file duration time in millisecond [mediaPlayer.getDuration()]
-        musicBar.loadFrom(path,duration)
-        //or use inputstream 
-        musicBar.loadFrom(getResources().openRawResource(R.raw.music),duration());
+        // Set if music bar divided or not default value false.
+        musicBar.setDivided(true);
+        
+        //Set divider size in px default value 2
+        musicBar.setDividerSize();
+        
+        // for changing color scheme
+        musicBar.setBackgroundBarPrimeColor(getResources().getColor(R.color.BackgroundBarPrimeColor);
+        musicBar.setBackgroundBarSecondaryColor(getResources().getColor(R.color.BackgroundBarSecondaryColor);
+        musicBar.setLoadedBarPrimeColor(getResources().getColor(R.color.LoadedBarPrimeColor);
+        musicBar.setLoadedBarSecondaryColor(getResources().getColor(R.color.LoadedBarSecondaryColor);
 
     }
 
