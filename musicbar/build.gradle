@@ -11,13 +11,13 @@ ext {
     libraryName = 'MusicBar'
     artifact = 'MusicBar'
 
-    libraryDescription = 'A wrapper for Facebook Native Like Button (LikeView) on Android'
+    libraryDescription = 'android lib create music bar like soundcloud'
 
     siteUrl = 'https://github.com/emadabdalrahman/MusicBar'
     gitUrl = 'https://github.com/emadabdalrahman/MusicBar.git'
     issueUrl = 'https://github.com/emadabdalrahman/MusicBar/issues'
 
-    libraryVersion = '1.0.3'
+    libraryVersion = '1.0.4'
 
     developerId = 'emad'
     developerName = 'emad'
