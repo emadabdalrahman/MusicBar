@@ -205,8 +205,10 @@ public class ScrollableMusicBar extends MusicBar implements ValueAnimator.Animat
         } else if (mSeekToPosition > mBarHeight.length) {
             mSeekToPosition = mBarHeight.length;
         } else {
-            if (mMusicBarChangeListener != null)
+            if (mMusicBarChangeListener != null) {
                 mMusicBarChangeListener.onProgressChanged(this, mSeekToPosition, true);
+                isTracking = true;
+            }
         }
         invalidate();
     }
