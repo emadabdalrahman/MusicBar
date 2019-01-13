@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,7 +21,6 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     String TAG = "MusicBar";
     int[] mBarHeight;
-    int mTrackDurationInSec;
     int mTrackDurationInMilliSec;
     int mMaxDataPerBar = 0;
     int mSpaceBetweenBar = 2;
@@ -30,16 +30,20 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     int mMaxNumOfBar = 0;
     int mBarDuration = 1000;
     float mBarWidth = 2;
+    float mPlaybackSpeed = 1.0f;
     boolean isNewLoad;
     boolean isHide = false;
     boolean isShow = true;
     boolean isAnimated;
+    boolean isTracking = false;
+    boolean isAutoProgress;
     Paint mLoadedBarPrimeColor;
     Paint mBackgroundBarPrimeColor;
     OnMusicBarProgressChangeListener mMusicBarChangeListener;
     OnMusicBarAnimationChangeListener mMusicBarAnimationChangeListener;
     int mAnimatedValue = 0;
-    ValueAnimator mValueAnimator;
+    ValueAnimator mBarAnimator;
+    ValueAnimator mProgressAnimator;
     float mFirstTouchX = 0;
     final int ANIMATION_TYPE_SHOW = 0;
     final int ANIMATION_TYPE_HIDE = 1;
@@ -165,15 +169,14 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     public void loadFrom(InputStream stream, int duration) {
         this.mStream = stream;
         this.mTrackDurationInMilliSec = duration;
-        this.mTrackDurationInSec = duration / 1000;
         try {
             this.mStreamLength = stream.available();
-//            this.mActualBitRate = stream.available() / duration;
         } catch (IOException e) {
             e.printStackTrace();
         }
         isNewLoad = true;
         mSeekToPosition = -1;
+        isAutoProgress = false;
         invalidate();
     }
 
@@ -188,9 +191,9 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     }
 
     int[] getBitPerSec() {
-        int[] data = getBitPer(mTrackDurationInSec * 2);
-        int[] dataPerSec = new int[mTrackDurationInSec];
-        for (int i = 0; i < mTrackDurationInSec; i++) {
+        int[] data = getBitPer(mTrackDurationInMilliSec / 500);
+        int[] dataPerSec = new int[mTrackDurationInMilliSec / 1000];
+        for (int i = 0; i < mTrackDurationInMilliSec / 1000; i++) {
             dataPerSec[i] = (data[i * 2] + data[i * 2 + 1]) / 2;
         }
         return dataPerSec;
@@ -290,42 +293,27 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     void onStartTrackingTouch() {
         if (mMusicBarChangeListener != null) {
             mMusicBarChangeListener.onStartTrackingTouch(this);
+            isTracking = true;
         }
     }
 
     void onStopTrackingTouch() {
         if (mMusicBarChangeListener != null) {
             mMusicBarChangeListener.onStopTrackingTouch(this);
+            isTracking = false;
+            if (isAutoProgress) {
+                initProgressAnimator(mPlaybackSpeed, getPosition(), mTrackDurationInMilliSec);
+            }
         }
     }
 
-    /**
-     * Start Hide Animation. if view is hide nothing will happened
-     */
-    public void hide() {
-        if (!isHide && mMaxBarHeight != 0) {
-            isAnimated = true;
-            initAnimator(0, mMaxBarHeight, ANIMATION_TYPE_HIDE);
-        }
-    }
+    private void initBarAnimator(int start, int end, final int animationType) {
+        if (mBarAnimator == null) {
+            mBarAnimator = ValueAnimator.ofInt(start, end);
+            mBarAnimator.setDuration(1000);
+            mBarAnimator.addUpdateListener(this);
 
-    /**
-     * Start Show Animation. if view is Show nothing will happened
-     */
-    public void show() {
-        if (!isShow && mMaxBarHeight != 0) {
-            isAnimated = true;
-            initAnimator(mMaxBarHeight, 0, ANIMATION_TYPE_SHOW);
-        }
-    }
-
-    private void initAnimator(int start, int end, final int animationType) {
-        if (mValueAnimator == null) {
-            mValueAnimator = ValueAnimator.ofInt(start, end);
-            mValueAnimator.setDuration(1000);
-            mValueAnimator.addUpdateListener(this);
-
-            mValueAnimator.addListener(new Animator.AnimatorListener() {
+            mBarAnimator.addListener(new Animator.AnimatorListener() {
 
                 @Override
                 public void onAnimationStart(Animator animation) {
@@ -352,7 +340,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
                             mMusicBarAnimationChangeListener.onHideAnimationEnd();
                     }
 
-                    clearAnimator();
+                    clearBarAnimator();
                 }
 
                 @Override
@@ -368,7 +356,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
                         if (mMusicBarAnimationChangeListener != null)
                             mMusicBarAnimationChangeListener.onHideAnimationEnd();
                     }
-                    clearAnimator();
+                    clearBarAnimator();
                 }
 
                 @Override
@@ -377,7 +365,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
                 }
             });
 
-            mValueAnimator.start();
+            mBarAnimator.start();
         }
     }
 
@@ -387,12 +375,118 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
         invalidate();
     }
 
-    private void clearAnimator() {
-        if (mValueAnimator != null) {
-            mValueAnimator.removeAllUpdateListeners();
-            mValueAnimator.removeAllListeners();
-            mValueAnimator.cancel();
-            mValueAnimator = null;
+    private void clearBarAnimator() {
+        if (mBarAnimator != null) {
+            mBarAnimator.removeAllUpdateListeners();
+            mBarAnimator.removeAllListeners();
+            mBarAnimator.cancel();
+            mBarAnimator = null;
+        }
+    }
+
+    private void initProgressAnimator(float playbackSpeed, int progress, int max) {
+        int timeToEnd = (int) ((max - progress) / playbackSpeed);
+        if (timeToEnd > 0) {
+            mProgressAnimator = ValueAnimator.ofInt(progress, max).setDuration(timeToEnd);
+            mProgressAnimator.setInterpolator(new LinearInterpolator());
+            mProgressAnimator.addUpdateListener(mProgressAnimatorUpdateListener);
+            mProgressAnimator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    clearProgressAnimator();
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+            mProgressAnimator.start();
+        }
+    }
+
+    ValueAnimator.AnimatorUpdateListener mProgressAnimatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
+        @Override
+        public void onAnimationUpdate(ValueAnimator animation) {
+            if (isTracking) {
+                clearProgressAnimator();
+            } else {
+                setAutoProgress((int) animation.getAnimatedValue());
+            }
+        }
+    };
+
+    private void setAutoProgress(int position) {
+        if (position >= 0 && position <= (mTrackDurationInMilliSec)) {
+            if (mSeekToPosition != position / mBarDuration) {
+                mSeekToPosition = position / mBarDuration;
+                if (mMusicBarChangeListener != null) {
+                    mMusicBarChangeListener.onProgressChanged(MusicBar.this, mSeekToPosition, false);
+                }
+                invalidate();
+            }
+        }
+    }
+
+    private void clearProgressAnimator() {
+        if (mProgressAnimator != null) {
+            mProgressAnimator.removeAllUpdateListeners();
+            mProgressAnimator.removeAllListeners();
+            mProgressAnimator.cancel();
+            mProgressAnimator = null;
+        }
+    }
+
+    public void startAutoProgress(float playbackSpeed) {
+        if (mTrackDurationInMilliSec > 0) {
+            this.isAutoProgress = true;
+            this.mPlaybackSpeed = playbackSpeed;
+            initProgressAnimator(playbackSpeed, 0, mTrackDurationInMilliSec);
+        }else {
+            try {
+                throw new  Exception("track duration less than 0 note startAutoProgress() should call after loadFrom()");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void stopAutoProgress() {
+        this.isAutoProgress = false;
+        clearProgressAnimator();
+    }
+
+    public boolean isAutoProgress() {
+        return isAutoProgress;
+    }
+
+    /**
+     * Start Hide Animation. if view is hide nothing will happened
+     */
+    public void hide() {
+        if (!isHide && mMaxBarHeight != 0) {
+            isAnimated = true;
+            initBarAnimator(0, mMaxBarHeight, ANIMATION_TYPE_HIDE);
+        }
+    }
+
+    /**
+     * Start Show Animation. if view is Show nothing will happened
+     */
+    public void show() {
+        if (!isShow && mMaxBarHeight != 0) {
+            isAnimated = true;
+            initBarAnimator(mMaxBarHeight, 0, ANIMATION_TYPE_SHOW);
         }
     }
 
@@ -427,6 +521,10 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
                 Log.i(TAG, "setProgress: " + mSeekToPosition);
                 if (mMusicBarChangeListener != null) {
                     mMusicBarChangeListener.onProgressChanged(this, mSeekToPosition, false);
+                }
+                if (isAutoProgress) {
+                    clearProgressAnimator();
+                    initProgressAnimator(mPlaybackSpeed, position, mTrackDurationInMilliSec);
                 }
                 invalidate();
             }
@@ -515,5 +613,17 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
             this.mBackgroundBarPrimeColor.setStrokeWidth(barWidth);
             this.mLoadedBarPrimeColor.setStrokeWidth(barWidth);
         }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (mProgressAnimator != null) {
+            clearProgressAnimator();
+        }
+        if (mBarAnimator != null) {
+            clearBarAnimator();
+        }
+
     }
 }
