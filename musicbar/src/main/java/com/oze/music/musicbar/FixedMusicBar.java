@@ -35,9 +35,9 @@ public class FixedMusicBar extends MusicBar {
 
         if (isNewLoad && mStream != null && mStreamLength > 0) {
             mBarHeight = getBarHeight(fixData(getBitPer(mMaxNumOfBar)));
-            isNewLoad = false;
 
-            mBarDuration = ((mStreamLength / mMaxNumOfBar) * 1000) / (mStreamLength / mTrackDurationInSec);
+            mBarDuration = mTrackDurationInMilliSec / mMaxNumOfBar;
+            isNewLoad = false;
         }
 
         if (mBarHeight != null && mBarHeight.length > 0) {
@@ -103,8 +103,10 @@ public class FixedMusicBar extends MusicBar {
             mSeekToPosition = mMaxNumOfBar;
         } else {
             invalidate();
-            if (mMusicBarChangeListener != null)
+            if (mMusicBarChangeListener != null) {
                 mMusicBarChangeListener.onProgressChanged(this, mSeekToPosition, true);
+                isTracking = true;
+            }
         }
     }
 }
