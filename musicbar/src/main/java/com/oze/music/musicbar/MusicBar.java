@@ -412,12 +412,16 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
             if (isTracking) {
                 clearProgressAnimator();
             } else {
-                setAutoProgress((int) animation.getAnimatedValue());
+                setAutoProgressPosition((int) animation.getAnimatedValue());
             }
         }
     };
 
-    private void setAutoProgress(int position) {
+    /**
+     * update view position when auto progress work
+     * @param position
+     */
+    private void setAutoProgressPosition(int position) {
         if (position >= 0 && position <= (mTrackDurationInMilliSec)) {
             if (mSeekToPosition != position / mBarDuration) {
                 mSeekToPosition = position / mBarDuration;
@@ -429,6 +433,9 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
         }
     }
 
+    /**
+     * clear auto progress animator
+     */
     private void clearProgressAnimator() {
         if (mProgressAnimator != null) {
             mProgressAnimator.removeAllUpdateListeners();
@@ -438,6 +445,15 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
         }
     }
 
+    /**
+     * start auto play animation should be called after
+     * loadFrom() and media player finished prepare
+     *
+     * if startAutoProgress() called before loadFrom()
+     * it will throw exception because duration is 0
+     *
+     * @param playbackSpeed playback from media play for current default value 1.0F for MediaPlayer and ExoPlayer
+     */
     public void startAutoProgress(float playbackSpeed) {
         if (mTrackDurationInMilliSec > 0) {
             this.isAutoProgress = true;
@@ -452,11 +468,19 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
         }
     }
 
+    /**
+     * stop auto progress animation
+     */
     public void stopAutoProgress() {
         this.isAutoProgress = false;
         clearProgressAnimator();
     }
 
+    /**
+     * Is auto progress.
+     *
+     * @return the boolean
+     */
     public boolean isAutoProgress() {
         return isAutoProgress;
     }
@@ -482,7 +506,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     }
 
     /**
-     * Is hide boolean.
+     * Is hide .
      *
      * @return boolean true if hide
      */
@@ -491,7 +515,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     }
 
     /**
-     * Is show boolean.
+     * Is show .
      *
      * @return boolean  true if show
      */
