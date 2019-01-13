@@ -199,15 +199,6 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
         return dataPerSec;
     }
 
-    int[] getBitPer2Sec() {
-        int[] dataPerSec = getBitPerSec();
-        int[] dataPer2Sec = new int[dataPerSec.length / 2];
-        for (int i = 0; i < dataPer2Sec.length; i++) {
-            dataPer2Sec[i] = (dataPerSec[i * 2] + dataPerSec[i * 2 + 1]) / 2;
-        }
-        return dataPer2Sec;
-    }
-
     int[] getBarHeight(int[] data) {
         int[] barHeight = new int[data.length];
         mMaxBarHeight = getHeight() - getPaddingBottom() - getPaddingTop();
