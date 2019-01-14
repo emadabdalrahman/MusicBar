@@ -10,7 +10,7 @@
 
 ```groovy
 dependencies {
-      implementation 'com.oze.music:MusicBar:1.0.4'
+      implementation 'com.oze.music:MusicBar:1.0.5'
 }
 ```
 ## Usage
@@ -24,6 +24,11 @@ loadFrom(InputStream stream, int duration) | take the music file InputStream wit
 loadFrom(String pathname, int duration) | take the music file path with music duration in millisecond
 show() | start show animation
 hide() | start hide animation
+startAutoProgress(float playbackSpeed) | start auto play animation should be called after loadFrom() and media player finished prepare if startAutoProgress() called before loadFrom() it will throw exception because duration is 0. every time loadFrom() call you will need to recall startAutoProgress()  **playbackSpeed** playback speed from media player default value 1.0F for MediaPlayer and ExoPlayer
+stopAutoProgress() | stop auto progress animation
+isHide() | return true if hide
+isShow() | return true if show
+isAutoProgress() | return true if auto progress 
 setProgress(int position) | move to specified position (in milisecand) 
 getPosition() | return current progress position
 setSpaceBetweenBar(int spaceBetweenBar) | change distance between bars (in px) **default 2** Recommend to make spaceBetweenBar equal barWidth if you use FixedMusicBar
@@ -128,6 +133,17 @@ OR FixedMusicBar
         musicBar.setLoadedBarPrimeColor(getResources().getColor(R.color.LoadedBarPrimeColor);
         musicBar.setLoadedBarSecondaryColor(getResources().getColor(R.color.LoadedBarSecondaryColor);
 
+
+        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                musicBar.startAutoProgress(1.0f);
+            }
+        });
+        
+        //stop auto progress animation
+        musicBar.stopAutoProgress();
+        
     }
 
 ```
