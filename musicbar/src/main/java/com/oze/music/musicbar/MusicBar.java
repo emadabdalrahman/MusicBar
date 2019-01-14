@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListener {
+public class MusicBar extends View {
 
     String TAG = "MusicBar";
     int[] mBarHeight;
@@ -166,6 +166,11 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
         }
     }
 
+    /**
+     * load the music file from file InputStream and music duration in millisecond
+     * @param stream music file InputStream
+     * @param duration music duration in millisecond
+     */
     public void loadFrom(InputStream stream, int duration) {
         this.mStream = stream;
         this.mTrackDurationInMilliSec = duration;
@@ -180,6 +185,11 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
         invalidate();
     }
 
+    /**
+     * load the music file from file path and music duration in millisecond
+     * @param pathname music file path
+     * @param duration music duration in millisecond
+     */
     public void loadFrom(String pathname, int duration) {
         File file = new File(pathname);
         try {
@@ -302,7 +312,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
         if (mBarAnimator == null) {
             mBarAnimator = ValueAnimator.ofInt(start, end);
             mBarAnimator.setDuration(1000);
-            mBarAnimator.addUpdateListener(this);
+            mBarAnimator.addUpdateListener(mBarAnimatorUpdateListener);
 
             mBarAnimator.addListener(new Animator.AnimatorListener() {
 
@@ -360,11 +370,13 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
         }
     }
 
-    @Override
-    public void onAnimationUpdate(ValueAnimator animation) {
-        mAnimatedValue = (int) animation.getAnimatedValue();
-        invalidate();
-    }
+    ValueAnimator.AnimatorUpdateListener mBarAnimatorUpdateListener= new ValueAnimator.AnimatorUpdateListener() {
+        @Override
+        public void onAnimationUpdate(ValueAnimator animation) {
+            mAnimatedValue = (int) animation.getAnimatedValue();
+            invalidate();
+        }
+    };
 
     private void clearBarAnimator() {
         if (mBarAnimator != null) {
@@ -409,7 +421,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     ValueAnimator.AnimatorUpdateListener mProgressAnimatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
         @Override
         public void onAnimationUpdate(ValueAnimator animation) {
-            if (isTracking) {
+            if (isTracking || !isAutoProgress) {
                 clearProgressAnimator();
             } else {
                 setAutoProgressPosition((int) animation.getAnimatedValue());
@@ -452,7 +464,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
      * if startAutoProgress() called before loadFrom()
      * it will throw exception because duration is 0
      *
-     * @param playbackSpeed playback from media play for current default value 1.0F for MediaPlayer and ExoPlayer
+     * @param playbackSpeed playback speed from media player default value 1.0F for MediaPlayer and ExoPlayer
      */
     public void startAutoProgress(float playbackSpeed) {
         if (mTrackDurationInMilliSec > 0) {
@@ -461,7 +473,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
             initProgressAnimator(playbackSpeed, 0, mTrackDurationInMilliSec);
         }else {
             try {
-                throw new  Exception("track duration less than 0 note startAutoProgress() should call after loadFrom()");
+                throw new  Exception("track duration less than 0 note startAutoProgress() should be called after loadFrom()");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -633,6 +645,7 @@ public class MusicBar extends View implements ValueAnimator.AnimatorUpdateListen
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        removeAllListener();
         if (mProgressAnimator != null) {
             clearProgressAnimator();
         }
