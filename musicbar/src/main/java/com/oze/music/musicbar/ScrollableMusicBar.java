@@ -11,7 +11,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 
-public class ScrollableMusicBar extends MusicBar implements ValueAnimator.AnimatorUpdateListener {
+public class ScrollableMusicBar extends MusicBar{
 
     private float startY;
     private float stopY;
