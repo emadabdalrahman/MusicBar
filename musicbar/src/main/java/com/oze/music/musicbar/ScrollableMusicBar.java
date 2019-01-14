@@ -1,6 +1,5 @@
 package com.oze.music.musicbar;
 
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
