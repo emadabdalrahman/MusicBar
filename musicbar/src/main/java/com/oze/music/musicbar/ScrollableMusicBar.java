@@ -66,6 +66,7 @@ public class ScrollableMusicBar extends MusicBar{
             isDivided = typedArray.getBoolean(R.styleable.MusicBar_divided, false);
             mDividerSize = typedArray.getFloat(R.styleable.MusicBar_dividerSize, 2);
             mBarWidth = typedArray.getFloat(R.styleable.MusicBar_barWidth, 3);
+            mBarDuration = typedArray.getInt(R.styleable.MusicBar_barDuration, 1000);
 
             mLoadedBarPrimeColor.setStrokeWidth(mBarWidth);
             mBackgroundBarPrimeColor.setStrokeWidth(mBarWidth);

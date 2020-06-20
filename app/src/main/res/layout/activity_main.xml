@@ -16,6 +16,8 @@
         android:paddingTop="8dp"
         android:paddingRight="8dp"
         android:paddingLeft="8dp"
+        app:barWidth="6"
+        app:barDuration="32"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
