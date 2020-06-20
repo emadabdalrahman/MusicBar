@@ -153,6 +153,7 @@ public class MusicBar extends View {
             mSpaceBetweenBar = typedArray.getInteger(R.styleable.MusicBar_spaceBetweenBar, 2);
 
             mBarWidth = typedArray.getFloat(R.styleable.MusicBar_barWidth, 2);
+            mBarDuration = typedArray.getInt(R.styleable.MusicBar_barDuration, 1000);
             mLoadedBarPrimeColor.setStrokeWidth(mBarWidth);
             mBackgroundBarPrimeColor.setStrokeWidth(mBarWidth);
 
@@ -201,9 +202,9 @@ public class MusicBar extends View {
     }
 
     int[] getBitPerSec() {
-        int[] data = getBitPer(mTrackDurationInMilliSec / 500);
-        int[] dataPerSec = new int[mTrackDurationInMilliSec / 1000];
-        for (int i = 0; i < mTrackDurationInMilliSec / 1000; i++) {
+        int[] data = getBitPer(mTrackDurationInMilliSec / (mBarDuration / 2));
+        int[] dataPerSec = new int[mTrackDurationInMilliSec / mBarDuration];
+        for (int i = 0; i < mTrackDurationInMilliSec / mBarDuration; i++) {
             dataPerSec[i] = (data[i * 2] + data[i * 2 + 1]) / 2;
         }
         return dataPerSec;
@@ -311,7 +312,7 @@ public class MusicBar extends View {
     private void initBarAnimator(int start, int end, final int animationType) {
         if (mBarAnimator == null) {
             mBarAnimator = ValueAnimator.ofInt(start, end);
-            mBarAnimator.setDuration(1000);
+            mBarAnimator.setDuration(mBarDuration);
             mBarAnimator.addUpdateListener(mBarAnimatorUpdateListener);
 
             mBarAnimator.addListener(new Animator.AnimatorListener() {
@@ -639,6 +640,18 @@ public class MusicBar extends View {
             this.mBarWidth = barWidth;
             this.mBackgroundBarPrimeColor.setStrokeWidth(barWidth);
             this.mLoadedBarPrimeColor.setStrokeWidth(barWidth);
+        }
+    }
+
+    /**
+     * Set bar duration in milliseconds.
+     * Default Value 1000 (1s)
+     *
+     * @param barDuration the bar duration in milliseconds
+     */
+    public void setBarDuration(int barDuration) {
+        if (barDuration > 0) {
+            this.mBarDuration = barDuration;
         }
     }
 
